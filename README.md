@@ -1,5 +1,4 @@
-# presentation23
-Repository for my INFOAN3k course assignment at Czech University. Explore my client-side web tech projects. Join me in shaping the future of the web!
+
 # INFOAN3k-ClientSide-InternetTechnologies
 
 Welcome to my repository for the "Internet Technologies - Client Side" course assignment at the Czech University of Life Sciences Prague (Česká zemědělská univerzita v Praze). This repository contains a collection of projects, code samples, and resources that showcase my exploration and understanding of various client-side web technologies.
