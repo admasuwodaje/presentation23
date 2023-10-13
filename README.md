@@ -10,7 +10,7 @@ Welcome to my repository for the "Internet Technologies - Client Side" course as
 
 ## Projects
 
-Explore the projects and code samples in this repository to learn more about client-side web development. These projects cover topics such as HTML, CSS, JavaScript, and more. I've created these projects through rigorous learning and experimentation.
+Explore the projects and code samples in this repository to learn more about client-side web development. These projects cover topics such as HTML, CSS, JavaScript, and more. I haven't created these projects from scratch.
 
 ## Get Involved
 
