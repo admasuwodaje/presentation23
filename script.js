@@ -1,122 +1,83 @@
-let body = document.body;
-let presentation = document.getElementById("presentation");
-let tools = document.getElementById("tools");
-let restart = document.getElementById("restart");
-let nextSlide = document.getElementById("nextSlide");
-let previousSlide = document.getElementById("previousSlide");
-let nextChapter = document.getElementById("nextChapter");
-let previousChapter = document.getElementById("previousChapter");
-let chapters = Array.from(document.getElementsByClassName("chapter"));
-let chapterLengths = chapters.map(c => parseInt(c.style.width.slice(0, -4)));
-let titles = document.getElementById("titles").children;
+const body = $("body");
+const presentation = $("#presentation");
+const tools = $("#tools");
+const restart = $("#restart");
+const nextSlide = $("#nextSlide");
+const previousSlide = $("#previousSlide");
+const nextChapter = $("#nextChapter");
+const previousChapter = $("#previousChapter");
+const chapters = $(".chapter");
+const chapterSlidesLength = chapters.map(function () {
+  return $(this).find("section").length;
+}).get();
+const titles = $("#titles").children().toArray();
 let chapter = 0;
 let slides = [];
-let t = setTimeout(fadeTools, 2500);
+let fadeTimeout;
 
-function init() {
-  slides = chapterLengths.map((s) => 0);
-  moveChapter(- chapter);
+function startPresentation() {
+  slides = chapterSlidesLength.map(() => 0);
+  moveChapter(-chapter);
 }
 
 function translatePresentation() {
-  presentation.style.translate = (slides[chapter] * -100).toString() + "vw " + (chapter * -100).toString() + "vh";
+  presentation.css("transform", `translate(${-slides[chapter] * 100}vw, ${-chapter * 100}vh)`);
 }
 
-function moveSlide(a) {
-  slides[chapter] = slides[chapter] + a;
-  if (slides[chapter] < 0) {
-    slides[chapter] = 0
-  } else if (slides[chapter] == chapterLengths[chapter]) {
-    --slides[chapter];
-  }
-  if (slides[chapter] == 0) {
-    previousSlide.disabled = true;
-  } else {
-    previousSlide.disabled = false;
-  }
-  if (slides[chapter] == chapterLengths[chapter] - 1) {
-    nextSlide.disabled = true;
-  } else {
-    nextSlide.disabled = false;
-  }
-  if (!((slides[chapter] == 0) || (slides[chapter] == chapterLengths[chapter] - 1))){
-    previousSlide.disabled = false;
-    nextSlide.disabled = false;
-  }
-  titles[chapter].getElementsByClassName("position")[0].innerHTML = slides[chapter] + 1;
+function moveSlide(delta) {
+  slides[chapter] = Math.min(Math.max(slides[chapter] + delta, 0), chapterSlidesLength[chapter] - 1);
+  previousSlide.prop("disabled", slides[chapter] === 0);
+  nextSlide.prop("disabled", slides[chapter] === chapterSlidesLength[chapter] - 1);
+  $(titles[chapter]).find(".position").html(slides[chapter] + 1);
   translatePresentation();
 }
 
-function moveChapter(a) {
-  titles[chapter].style.display = "none";
-  chapter = chapter + a;
-  if (chapter < 0) {
-    chapter = 0
-  } else if (chapter == chapter.length) {
-    --chapter;
-  }
-  if (chapter == 0) {
-    nextChapter.disabled = "";
-    previousChapter.disabled = "disabled";
-  } else if (chapter == chapters.length - 1) {
-    previousChapter.disabled = "";
-    nextChapter.disabled = "disabled";
-  } else {
-    previousChapter.disabled = "";
-    nextChapter.disabled = "";
-  }
-  titles[chapter].style.display = "inline";
+function moveChapter(delta) {
+  $(titles[chapter]).css("display", "none");
+  chapter = Math.min(Math.max(chapter + delta, 0), chapters.length - 1);
+  previousChapter.prop("disabled", chapter === 0);
+  nextChapter.prop("disabled", chapter === chapters.length - 1);
+  $(titles[chapter]).css("display", "inline");
   moveSlide(0);
-  unFadeTools();
-  fadeToolsTimeout();
   translatePresentation();
 }
 
 function keyMove(e) {
-  switch(e.key) {
-    case " ":
-    	if (e.shiftKey) {
-      	moveSlide(-1);
-    	} else {
-      	moveSlide(1);
-    	}
-    	break;
-    case "ArrowRight":
-    	moveSlide(1);
-    	break;
-    case "ArrowLeft":
-    	moveSlide(-1);
-    	break;
-    case "ArrowDown":
-    	moveChapter(1);
-    	break;
-    case "ArrowUp":
-    	moveChapter(-1);
-    	break;
+  const keyFunctions = {
+    " ": () => moveSlide(e.shiftKey ? -1 : 1),
+    "ArrowRight": () => moveSlide(1),
+    "ArrowLeft": () => moveSlide(-1),
+    "ArrowDown": () => moveChapter(1),
+    "ArrowUp": () => moveChapter(-1)
+  };
+
+  const keyFunction = keyFunctions[e.key];
+  if (keyFunction) {
+    keyFunction();
   }
 }
 
-function fadeToolsTimeout() {
-  console.log("HOHO");
-  t = setTimeout(fadeTools, 2500);
-}
 
-function fadeTools() {
-  tools.style.opacity = 0.05;
-}
+nextSlide.on("click", function () {
+  moveSlide(1);
+  presentation.animate({ left: "100%" }, 7000); // slide presentation to the left
+});
 
-function unFadeTools(e) {
-  clearTimeout(t);
-  tools.style.opacity = 1;
-}
+previousSlide.on("click", function () {
+  moveSlide(-1);
+  presentation.animate({ left: "+=100%" }, 500); // slide presentation to the right
+});
 
+nextChapter.on("click", function () {
+  moveChapter(1);
+  presentation.animate({ top: "-=100%" }, 500); // slide presentation up
+});
 
-nextSlide.addEventListener("click", (e) => moveSlide(1));
-previousSlide.addEventListener("click", (e) => moveSlide(-1));
-nextChapter.addEventListener("click", (e) => moveChapter(1));
-previousChapter.addEventListener("click", (e) => moveChapter(-1));
-restart.addEventListener("click", (e) => init())
-tools.addEventListener("mouseenter",  unFadeTools)
-tools.addEventListener("mouseleave",  fadeToolsTimeout)
-body.addEventListener("keyup", keyMove);
-init();
+previousChapter.on("click", function () {
+  moveChapter(-1);
+  presentation.animate({ top: "+=100%" }, 500); // slide presentation down
+});
+
+restart.on("click", () => startPresentation());
+body.on("keyup", keyMove);
+startPresentation();
