@@ -8,12 +8,48 @@ Welcome to my repository for the "Internet Technologies - Client Side" course as
 - **Course Name:** Internet Technologies - Client Side
 - **University:** Czech University of Life Sciences Prague
 
-## Projects
+## Table of Contents
+- [Project Structure](#project-structure)
+- [HTML Files](#html-files)
+- [Frontend CULS 2023](#frontend-culs-2023)
+- [Tools](#tools)
+- [Content](#content)
+- [Presentation](#presentation)
+- [Scripting](#scripting)
+- [Contact Information](#contact-information)
 
-Explore the projects and code samples in this repository to learn more about client-side web development. These projects cover topics such as HTML, CSS, JavaScript, and more. I haven't created these projects from scratch.
+## Project Structure
+This project comprises HTML files, each serving as a chapter within the presentation. The chapters are organized as follows:
 
-## Get Involved
+- **Frontend CULS 2023**
+- **Tools**
+- **Content**
+- **Presentation**
+- **Scripting**
 
-Whether you're a fellow student, a web developer, or someone interested in web technologies, feel free to explore this repository. Join me in shaping the future of the web by learning, collaborating, and sharing insights.
+Each HTML file consists of multiple sections, representing the content within each chapter.
 
-I hope you find these projects inspiring and informative as we navigate the ever-evolving world of Internet technologies.
+## HTML Files
+### Frontend CULS 2023
+This chapter introduces the presentation, providing information about the speaker, organization, theory, and project requirements.
+
+### Tools
+This chapter delves into the tools employed in the presentation, including Source Control Management (Git and GitHub), code editors (Atom and Visual Studio Code), and developer tools.
+
+### Content
+The Content chapter focuses on documents, data, and various content formats such as HTML, XML, DOM, JSON, media, and more.
+
+### Presentation
+This chapter explores aspects related to the visual presentation of content, encompassing CSS, responsive design, frameworks, and communication in web applications.
+
+### Scripting
+The Scripting chapter covers JavaScript, live screens, NPM packages, popular frameworks, transpilers, tooling, JavaScript engines, and other frontend development-related topics.
+
+## Contact Information
+For additional information or to get in touch with the presenter, you can contact Pepe through the following channels:
+
+- Mixcloud: [@damnpepe](https://www.mixcloud.com/damnpepe)
+- SourceHut: [@pepe](https://sourcehut.org/~pepe)
+- Telegram: [@4207742778707](https://t.me/4207742778707)
+
+Thank you for using Pepe's Prez. If you have any questions or require further assistance, please do not hesitate to contact the presenter through the provided contact information. Enjoy the presentation!
