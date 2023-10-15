@@ -1,16 +1,15 @@
-const body = $("body");
-const presentation = $("#presentation");
-const tools = $("#tools");
-const restart = $("#restart");
-const nextSlide = $("#nextSlide");
-const previousSlide = $("#previousSlide");
-const nextChapter = $("#nextChapter");
-const previousChapter = $("#previousChapter");
-const chapters = $(".chapter");
-const chapterSlidesLength = chapters.map(function () {
-  return $(this).find("section").length;
-}).get();
-const titles = $("#titles").children().toArray();
+const body = document.body;
+const presentation = document.getElementById("presentation");
+const tools = document.getElementById("tools");
+const restart = document.getElementById("restart");
+const nextSlide = document.getElementById("nextSlide");
+const previousSlide = document.getElementById("previousSlide");
+const nextChapter = document.getElementById("nextChapter");
+const previousChapter = document.getElementById("previousChapter");
+const chapters = document.querySelectorAll(".chapter");
+const chapterSlidesLength = Array.from(chapters).map(chapter => chapter.querySelectorAll("section").length);
+const titles = Array.from(document.getElementById("titles").children);
+
 let chapter = 0;
 let slides = [];
 let fadeTimeout;
@@ -21,23 +20,23 @@ function startPresentation() {
 }
 
 function translatePresentation() {
-  presentation.css("transform", `translate(${-slides[chapter] * 100}vw, ${-chapter * 100}vh)`);
+  presentation.style.transform = `translate(${-slides[chapter] * 100}vw, ${-chapter * 100}vh)`;
 }
 
 function moveSlide(delta) {
   slides[chapter] = Math.min(Math.max(slides[chapter] + delta, 0), chapterSlidesLength[chapter] - 1);
-  previousSlide.prop("disabled", slides[chapter] === 0);
-  nextSlide.prop("disabled", slides[chapter] === chapterSlidesLength[chapter] - 1);
-  $(titles[chapter]).find(".position").html(slides[chapter] + 1);
+  previousSlide.disabled = slides[chapter] === 0;
+  nextSlide.disabled = slides[chapter] === chapterSlidesLength[chapter] - 1;
+  titles[chapter].querySelector(".position").innerHTML = slides[chapter] + 1;
   translatePresentation();
 }
 
 function moveChapter(delta) {
-  $(titles[chapter]).css("display", "none");
+  titles[chapter].style.display = "none";
   chapter = Math.min(Math.max(chapter + delta, 0), chapters.length - 1);
-  previousChapter.prop("disabled", chapter === 0);
-  nextChapter.prop("disabled", chapter === chapters.length - 1);
-  $(titles[chapter]).css("display", "inline");
+  previousChapter.disabled = chapter === 0;
+  nextChapter.disabled = chapter === chapters.length - 1;
+  titles[chapter].style.display = "inline";
   moveSlide(0);
   translatePresentation();
 }
@@ -57,27 +56,30 @@ function keyMove(e) {
   }
 }
 
-
-nextSlide.on("click", function () {
+nextSlide.addEventListener("click", () => {
   moveSlide(1);
-  presentation.animate({ left: "100%" }, 7000); // slide presentation to the left
+  presentation.style.left = "100%";
+  presentation.animate({ left: "100%" }, 7000);
 });
 
-previousSlide.on("click", function () {
+previousSlide.addEventListener("click", () => {
   moveSlide(-1);
-  presentation.animate({ left: "+=100%" }, 500); // slide presentation to the right
+  presentation.style.left = `${parseInt(presentation.style.left) - 100}%`;
+  presentation.animate({ left: `${parseInt(presentation.style.left) - 100}%` }, 500);
 });
 
-nextChapter.on("click", function () {
+nextChapter.addEventListener("click", () => {
   moveChapter(1);
-  presentation.animate({ top: "-=100%" }, 500); // slide presentation up
+  presentation.style.top = `${parseInt(presentation.style.top) - 100}%`;
+  presentation.animate({ top: `${parseInt(presentation.style.top) - 100}%` }, 500);
 });
 
-previousChapter.on("click", function () {
+previousChapter.addEventListener("click", () => {
   moveChapter(-1);
-  presentation.animate({ top: "+=100%" }, 500); // slide presentation down
+  presentation.style.top = `${parseInt(presentation.style.top) + 100}%`;
+  presentation.animate({ top: `${parseInt(presentation.style.top) + 100}%` }, 500);
 });
 
-restart.on("click", () => startPresentation());
-body.on("keyup", keyMove);
+restart.addEventListener("click", startPresentation);
+body.addEventListener("keyup", keyMove);
 startPresentation();
